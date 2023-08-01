@@ -30,5 +30,4 @@ public class ReplyDTO {
     private long gno = 0L;
 
     private int step;
-    
 }

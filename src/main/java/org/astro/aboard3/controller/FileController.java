@@ -136,7 +136,7 @@ public class FileController {
         try {
             String mimeType = Files.probeContentType(originFile.toPath());
 
-            if(mimeType.startsWith("image")) {
+            if(mimeType.startsWith("img")) {
                 File thumbFile = new File(uploadPath, "s_" + fileName);
                 thumbFile.delete();
             }

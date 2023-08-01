@@ -92,7 +92,7 @@ public class BoardController {
 
         boardService.modify(boardDTO);
 
-        log.info("POST ----------postModify----------");
+        log.info("POST ||||| ----------postModify----------");
 
         return "redirect:/board/read" + bno;
     }

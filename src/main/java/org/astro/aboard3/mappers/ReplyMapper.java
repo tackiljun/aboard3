@@ -22,5 +22,4 @@ public interface ReplyMapper {
 
     // 삭제.
     int replyDelete(Long rno);
-    
 }

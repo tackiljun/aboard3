@@ -6,6 +6,88 @@
 <mapper namespace="org.astro.aboard3.mappers.BoardMapper">
 
     <selectt id="getList" resultType="org.astro.aboard3.dto.BoardDTO">
+
+        select b.bno, b.title, b.content, b.writer,
+            concat(bi.uuid,'_',bi.fileName) as fileName
+        from tbl_board b
+            left outer join tbl_board_image bi on bi.bno = b.bno
+        where bi.ord = 0 or bi.ord is null
+        order by b.bno desc
+        limit #{skip}, #{size}
+
+        <if test="keyword != null and types != null">
+            <trim prefix="and (" prefixOverrides="or" suffix=")">
+                <foreach collection="types" item="type" separator=" or ">
+                    <if test='type == "t"'>
+                        b.title like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test='type == "c"'>
+                        b.content like concat('%', #{keyword}, '%')
+                    </if>
+                    <if test='type == "w"'>
+                        b.writer like concat('%', #{keyword}, '%')
+                    </if>
+                </foreach>
+            </trim>
+        </if>
+            order by b.bno desc 
+            limit #{skip}, #{size}    
     </select>
+
+    <!-- read -->
+    <select id="getRead" resultMap="fileListMap">
+        select b.bno, b.title, b.content, b.writer, 
+            concat(bi.uuid, '_', bi.fileName) as fileNames
+        from tbl_board b
+        left outer join tbl_board_image bi on bi.bno = b.bno
+        where b.bno = #{bno}
+    </select>
+
+    <!-- read - file (resultMap) -->
+    <resultMap id="fileListMap" type="org.astro.aboard3.dto.BoardDTO">
+        <id property="bno" column="bno"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="writer" column="writer"/>
+        <result property="duedate" column="duedate"/>
+        <collection property="fileNames" resultMap="fileMap"/>
+    </resultMap>
+
+    <resultMap id="fileMap" type="string">
+        <result property="fileNames" column="fileNames"/>
+    </resultMap>
+
+    <insert id="regist" parameterType="org.astro.aboard3.dto.BoardDTO">
+        insert into tbl_board (title, content, writer) values (#{title}, #{content}, #{writer})
+
+        <selectKey resultType="int" keyProperty="bno" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="modify">
+        update tbl_board set title = #{title}, content = #{content} where bno = #{bno}
+    </update>
+
+    <delete id="delete">
+        delete from tbl_board where bno = #{bno}
+    </delete>
+
+    <select id="listCount" resultType="long">
+        select count(*) from (select bno from tbl_board where bno > 0 limit #{countEnd}) board  
+    </select>
+
+    <!-- ==========img처리========== -->
+    <insert id="registerImg" >
+        insert into tbl_board_image (uuid, fileName, bno, ord) values
+
+        <foreach collection="list" item="item" separator=",">
+            (#{item.uuid}, #{item.fileName}, #{item.bno}, #{item.ord})
+        </foreach>
+    </insert>
+
+    <delete id="deleteImg"> 
+        DELETE FROM tbl_board_image WHERE bno = #{bno}
+    </delete>
 
 </mapper>
