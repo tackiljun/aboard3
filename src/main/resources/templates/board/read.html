@@ -45,7 +45,7 @@ layout:decorate="~{layout/lteLayout.html}">
 
                 <div class="uploadWrap mb-3">
                     <ul class="uploadUL">
-                        <h5 class="mb-0">File</h5>
+                        <h5 class="mb-0">FILE</h5>
                         <li th:each="list: ${dto.fileNames}">
                             <a th:href="@{|http://localhost/${list}|}" target="_blank" style="height: 100px;">
                                 <img th:src="|http://localhost/${list}|" height="100"/>
@@ -58,13 +58,13 @@ layout:decorate="~{layout/lteLayout.html}">
         </div>
 
         <form class="actionForm">
-            <button onclick="location.href='/board/list'" type="button" class="btn btn-primary" style="width: auto; ">
+            <button onclick="location.href='/board/list'" type="button" class="btn btn-primary" style="width: auto;">
                 LIST
             </button>
-            <button class="btn btn-primary btn-secondary btnModify" style="width: auto; ">
+            <button class="btn btn-primary btn-secondary btnModify" style="width: auto;">
                 MODIFY
             </button>
-            <button class="btn btn-primary btn-danger btnDelete" style="width: auto; ">
+            <button class="btn btn-primary btn-danger btnDelete" style="width: auto;">
                 DELETE
             </button>
         </form>
@@ -117,12 +117,12 @@ layout:decorate="~{layout/lteLayout.html}">
   
     <script layout:fragment="script" th:inline="javascript"> 
 
-        // 리스트 수정,삭제
+        // 리스트 수정,삭제.
         const actionForm = document.querySelector(".actionForm")
         const btnModify = document.querySelector(".btnModify")
         const btnDelete = document.querySelector(".btnDelete")    
 
-        // 댓글
+        // 댓글.
         const replyUL = document.querySelector(".replyUL")
         const {bno} = [[${dto}]]
 
@@ -133,7 +133,7 @@ layout:decorate="~{layout/lteLayout.html}">
         const btnReplyModify = document.querySelector(".btnReplyModify")
         const replyModifyVal = replyModify.querySelector(".replyModifyVal")
 
-        // 댓글 삭제
+        // 댓글 삭제.
         const btnReplyDelete = document.querySelector(".btnReplyDelete")
 
         // 댓글목록을 가져오는 함수.
@@ -147,7 +147,7 @@ layout:decorate="~{layout/lteLayout.html}">
             const res = await axios.get(`http://localhost:8080/replies/read/${rno}`)
             return res.data
 
-            console.log("rno"+rno)
+            console.log("rno: " + rno)
         }
 
         let page = 1
@@ -167,7 +167,7 @@ layout:decorate="~{layout/lteLayout.html}">
                 const {rno, reply, replyer} = list[i]
 
                 str += `<li data-rno=${rno}>No.${rno} | ${reply} | 【작성자 : ${replyer}】 </li>`
-            } //end for.
+            } // end for.
 
             replyUL.innerHTML = str
 
@@ -182,29 +182,32 @@ layout:decorate="~{layout/lteLayout.html}">
         }
 
         replyBtn.addEventListener("click", e => {
-            const replyVal = document.querySelector("input[name=reply]").value // AAAA 담김.
-            const replyerVal = document.querySelector("input[name=replyer]").value // USER00.
+            // AAAA 담김.
+            const replyVal = document.querySelector("input[name=reply]").value
+            // USER00.
+            const replyerVal = document.querySelector("input[name=replyer]").value
 
-            const temp = {reply: replyVal, replyer: replyerVal} // temp로 묶음.
+            // temp로 묶음.
+            const temp = {reply: replyVal, replyer: replyerVal}
 
             postRemoteAdd(temp).then(result => {       
-                console.log("result:....."+result);
+                console.log("result: " + result);
                 loadReply()
             })
         }, false)
 
-        //댓글 수정.
+        // 댓글수정.
         const putReply = async(reply) => {
             const res = await axios.put(`http://localhost:8080/replies/modify/${reply.rno}`, reply)
             return res.data
         }
 
-        //댓글수정 모달.
+        // 댓글수정 모달.
         replyWrap.addEventListener("click", (e) => {
             e.preventDefault()
             e.stopPropagation()
 
-            //target 찾기.
+            // target 찾기.
             const target = e.target
 
             if (!target.getAttribute("data-rno")) {
@@ -221,7 +224,7 @@ layout:decorate="~{layout/lteLayout.html}">
             })
         }, false)
 
-        // 댓글 수정.
+        // 댓글수정.
         btnReplyModify.addEventListener("click", (e) => {
         
             e.preventDefault()
@@ -231,7 +234,7 @@ layout:decorate="~{layout/lteLayout.html}">
             const rno = replyModify.querySelector("input[name=rno]").value
             const reply = replyModify.querySelector("input[name=reply]").value
 
-            //객체로 만들기.
+            // 객체로 만들기.
             const temp = {rno, reply}
 
             putReply(temp).then(data => {
@@ -242,13 +245,13 @@ layout:decorate="~{layout/lteLayout.html}">
             })
         })
 
-        // 댓글 삭제.
+        // 댓글삭제.
         const deleteReply = async(rno) => {
             const res = await axios.delete(`http://localhost:8080/replies/delete/${rno}`)
             return res.data
         }
 
-        // 댓글 삭제.
+        // 댓글삭제.
         btnReplyDelete.addEventListener("click", (e) => {
         
             e.preventDefault()
@@ -265,13 +268,13 @@ layout:decorate="~{layout/lteLayout.html}">
         })
 
         btnModify.addEventListener("click", (e) => {
-            actionForm.setAttribute("action", `/board/modify/[[${ dto.bno }]]`)
+            actionForm.setAttribute("action", `/board/modify/[[${dto.bno}]]`)
             actionForm.setAttribute("method", `get`)
             actionForm.submit();
         })
 
         btnDelete.addEventListener("click", (e) => {
-            actionForm.setAttribute("action", `/board/delete/[[${ dto.bno }]]`)
+            actionForm.setAttribute("action", `/board/delete/[[${dto.bno}]]`)
             actionForm.setAttribute("method", `post`)
             actionForm.submit();
         })

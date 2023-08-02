@@ -66,7 +66,7 @@ public class BoardController {
 
         model.addAttribute("dto", boardService.getRead(bno));
 
-        log.info("GET ||||| ----------getModify");
+        log.info("GET ||||| ----------getModify----------");
 
         return "/board/modify";
     }

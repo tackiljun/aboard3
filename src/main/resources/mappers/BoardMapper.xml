@@ -5,14 +5,12 @@
 
 <mapper namespace="org.astro.aboard3.mappers.BoardMapper">
 
-    <selectt id="getList" resultType="org.astro.aboard3.dto.BoardDTO">
+    <select id="getList" resultType="org.astro.aboard3.dto.BoardDTO">
 
         select b.bno, b.title, b.content, b.writer, concat(bi.uuid, '_', bi.fileName) as fileName
         from tbl_board b left outer join tbl_board_image bi on bi.bno = b.bno
         where bi.ord = 0 or bi.ord is null
-        order by b.bno desc
-        limit #{skip}, #{size}
-
+        
         <if test="keyword != null and types != null">
             <trim prefix="and (" prefixOverrides="or" suffix=")">
                 <foreach collection="types" item="type" separator=" or ">

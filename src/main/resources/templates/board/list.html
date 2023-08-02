@@ -10,10 +10,10 @@
             <div class="card-body">
                 <h1>LIST PAGE</h1>        
                 <!-- [[${pageResponseDTO.list}]] -->
-                
+
                 <hr>
 
-                <!--/* //검색 */-->
+                <!-- // 검색.  -->
                 <div class="mb-3 searchWrap">
                     <form class="actionForm" action="/board/list" method="get">
                     <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
@@ -28,7 +28,8 @@
                         <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
                     </select>
                     
-                    <input type="text" name="keyword" class="form-control mb-3" placeholder="검색어를 입력 해주세요." style="width: 500px;" th:value="${pageRequestDTO.keyword}">
+                    <input type="text" name="keyword" class="form-control mb-3" 
+                    placeholder="검색어를 입력 해주세요." style="width: 500px;" th:value="${pageRequestDTO.keyword}">
                     
                     <div class="button_wrap">
                         <button type="submit" class="btn btn-primary btnSearch">검색</button>
@@ -36,7 +37,7 @@
                     
                     </form>
                 </div>
-                <!--/* //검색 */-->
+                <!-- // 검색. -->
 
                 <form>
                     <table class="boardTable table table-bordered">
@@ -108,10 +109,10 @@
 
         }, false)
 
-        const { page, size } = [[${ pageRequestDTO }]]
+        const { page, size } = [[${pageRequestDTO}]]
         console.log(page, size)
 
-        const { total } = [[${ pageResponseDTO }]]
+        const { total } = [[${pageResponseDTO}]]
         console.log("total: " + total)
 
 
@@ -138,7 +139,7 @@
 
         }, false)
 
-        //검색.
+        // 검색.
         btnSearch.addEventListener("click", e => {
         
             e.preventDefault()
@@ -146,14 +147,14 @@
 
             console.log("==============")
             
-            //검색타입, 키워드 입력 안되었을 시 return.
+            // 검색타입, 키워드 입력 안되었을 시 return.
             if(typeObj.options[typeObj.selectedIndex].value === "" && keywordObj.value !== "") {
                 alert("검색 조건을 선택해주세요")
 
                 return
             }
             
-            //검색 하고나면 page 1페이지 set.
+            // 검색 하고나면 page 1페이지 set.
             pageObj.value = 1      
 
             actionForm.submit()

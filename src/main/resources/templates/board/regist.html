@@ -132,7 +132,8 @@
             let str =""
                 
             for(const uploadFile of arr) {
-                const {fileName,link,uuid} = uploadFile // 구조 분해 할당.
+                // 구조 분해 할당.
+                const {fileName,link,uuid} = uploadFile
 
                 str += `
                     <li data-uuid='${uuid}' data-fileName='${fileName}'>
@@ -161,7 +162,7 @@
 
             axios.delete(`http://localhost:8080/removeFile/${uuid}_${fileName}`)
 
-            // 목록 삭제.
+            // 목록삭제.
             liObj.remove()
 
         }
