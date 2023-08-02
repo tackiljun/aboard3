@@ -7,10 +7,8 @@
 
     <selectt id="getList" resultType="org.astro.aboard3.dto.BoardDTO">
 
-        select b.bno, b.title, b.content, b.writer,
-            concat(bi.uuid,'_',bi.fileName) as fileName
-        from tbl_board b
-            left outer join tbl_board_image bi on bi.bno = b.bno
+        select b.bno, b.title, b.content, b.writer, concat(bi.uuid, '_', bi.fileName) as fileName
+        from tbl_board b left outer join tbl_board_image bi on bi.bno = b.bno
         where bi.ord = 0 or bi.ord is null
         order by b.bno desc
         limit #{skip}, #{size}
@@ -36,8 +34,7 @@
 
     <!-- read -->
     <select id="getRead" resultMap="fileListMap">
-        select b.bno, b.title, b.content, b.writer, 
-            concat(bi.uuid, '_', bi.fileName) as fileNames
+        select b.bno, b.title, b.content, b.writer, concat(bi.uuid, '_', bi.fileName) as fileNames
         from tbl_board b
         left outer join tbl_board_image bi on bi.bno = b.bno
         where b.bno = #{bno}
@@ -87,7 +84,7 @@
     </insert>
 
     <delete id="deleteImg"> 
-        DELETE FROM tbl_board_image WHERE bno = #{bno}
+        delete from tbl_board_image where bno = #{bno}
     </delete>
 
 </mapper>

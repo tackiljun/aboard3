@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/lteLayout.html}">
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="card">
+            <div class="card-body">
+                <h1>LIST PAGE</h1>        
+                <!-- [[${pageResponseDTO.list}]] -->
+                
+                <hr>
+
+                <!--/* //검색 */-->
+                <div class="mb-3 searchWrap">
+                    <form class="actionForm" action="/board/list" method="get">
+                    <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
+                    <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
+                    
+                    <select name="type" class="form-select mb-3">
+                        <option value="">===============</option>
+                        <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                        <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                        <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+                        <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목+내용</option>
+                        <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목+내용+작성자</option>
+                    </select>
+                    
+                    <input type="text" name="keyword" class="form-control mb-3" placeholder="검색어를 입력 해주세요." style="width: 500px;" th:value="${pageRequestDTO.keyword}">
+                    
+                    <div class="button_wrap">
+                        <button type="submit" class="btn btn-primary btnSearch">검색</button>
+                    </div>
+                    
+                    </form>
+                </div>
+                <!--/* //검색 */-->
+
+                <form>
+                    <table class="boardTable table table-bordered">
+
+                        <tr style="font-weight: bold;">
+                            <td>BNO</td>              
+                            <td>TITLE</td>
+                            <td>WRITER</td>
+                        </tr>
+
+                        <tr th:each="dto: ${pageResponseDTO.list}">
+                            <td>[[${dto.bno}]]</td>
+                            <td th:data-bno="${dto.bno}">
+                                <a th:href="@{|http://localhost/${dto.fileName}|}" target="_blank" style="height: 80px;">
+                                    <img th:if="${dto.fileName}" th:src="|http://localhost/${dto.fileName}|" height="80"/>
+                                    <img th:unless="${dto.fileName}" th:src="|http://localhost/noimage.png|" width="80"/>
+                                </a>
+                                [[${dto.title}]]
+                            </td>
+                            <td>[[${dto.writer}]]</td>
+                        </tr>
+
+                    </table>
+                </form>
+
+                <button 
+                onclick="location.href='/board/regist'" 
+                type="submit" 
+                class="btn btn-primary btn-block" 
+                style="width: auto;">
+                    REGIST
+                </button>
+            </div>
+        </div>
+
+        <div class="card-footer clearfix">
+            <ul class="pagination pagination-sm m-0 float-right boardUL"></ul>
+        </div>
+
+        <script src="/js/pageUtil.js"></script>
+
+    </div>  
+
+    <script layout:fragment="script" th:inline="javascript">
+
+        const actionForm = document.querySelector(".actionForm")
+        const boardTable = document.querySelector(".boardTable")    
+        const pageObj = actionForm.querySelector("input[name='page']")
+        const boardUL = document.querySelector(".boardUL")
+        
+        const typeObj = actionForm.querySelector("select[name=type]")
+        const keywordObj = actionForm.querySelector("input[name=keyword]")
+        const btnSearch = document.querySelector(".btnSearch")
+
+        boardUL.addEventListener("click", (e) => {
+            e.preventDefault()
+            e.stopPropagation()      
+
+            const target = e.target
+            const pageNum = target.getAttribute("href")
+
+            if(!pageNum) {
+                return
+            }
+            pageObj.value = pageNum
+
+            actionForm.setAttribute("action", `/board/list`)
+            actionForm.submit()
+
+        }, false)
+
+        const { page, size } = [[${ pageRequestDTO }]]
+        console.log(page, size)
+
+        const { total } = [[${ pageResponseDTO }]]
+        console.log("total: " + total)
+
+
+
+        const pageLIStr = makePages(page, size, total)
+        console.log("boardUL: " + boardUL)
+
+        boardUL.innerHTML = pageLIStr
+
+        boardTable.addEventListener("click", (e) => {
+
+            const target = e.target
+
+            if(!target.getAttribute("data-bno")) {
+                return
+            }
+
+            const bno = target.getAttribute("data-bno")
+            console.log("BNO: " + bno)
+
+            actionForm.setAttribute("action", `/board/read/${bno}`)
+            actionForm.setAttribute("method", `get`)
+            actionForm.submit()
+
+        }, false)
+
+        //검색.
+        btnSearch.addEventListener("click", e => {
+        
+            e.preventDefault()
+            e.stopPropagation()
+
+            console.log("==============")
+            
+            //검색타입, 키워드 입력 안되었을 시 return.
+            if(typeObj.options[typeObj.selectedIndex].value === "" && keywordObj.value !== "") {
+                alert("검색 조건을 선택해주세요")
+
+                return
+            }
+            
+            //검색 하고나면 page 1페이지 set.
+            pageObj.value = 1      
+
+            actionForm.submit()
+        }, false)
+
+    </script>
+
+</body>
+</html>

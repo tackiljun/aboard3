@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout/lteLayout.html}">
+
+<!-- <style>
+    div .list {
+        border: 2px solid black; 
+        margin-bottom: 4px;
+        margin-top: 4px;
+        padding: 4px;
+    }
+
+    button {
+        background-color: rgb(197, 194, 194);
+        width: 80px;
+        height: 30px;
+        font-size: 18px;
+        border-radius: 10px;
+    }  
+</style> -->
+
+<body>
+   
+    <div class="container-fluid pt-4 px-4" layout:fragment="content">
+
+        <h1>READ PAGE</h1>
+
+        <div class="col-md-6">
+            <div class="card card-success">
+                <div class="card-body">
+                    <label>NO.</label>
+                    <div class="form-control form-control-lg">[[${dto.bno}]]</div>
+                    <label>TITLE</label>
+                    <div class="form-control form-control-lg">[[${dto.title}]]</div>
+                    <label>WRITER</label>
+                    <div class="form-control form-control-lg">[[${dto.writer}]]</div>
+                    <label>CONTENT</label>
+                    <div class="form-control form-control-lg">[[${dto.content}]]</div>
+                    <label>DUEDATE</label>
+                    <div class="form-control form-control-lg">[[${dto.duedate}]]</div>
+                </div>
+
+                <hr>        
+
+                <div class="uploadWrap mb-3">
+                    <ul class="uploadUL">
+                        <h5 class="mb-0">File</h5>
+                        <li th:each="list: ${dto.fileNames}">
+                            <a th:href="@{|http://localhost/${list}|}" target="_blank" style="height: 100px;">
+                                <img th:src="|http://localhost/${list}|" height="100"/>
+                                [[${list}]]
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <form class="actionForm">
+            <button onclick="location.href='/board/list'" type="button" class="btn btn-primary" style="width: auto; ">
+                LIST
+            </button>
+            <button class="btn btn-primary btn-secondary btnModify" style="width: auto; ">
+                MODIFY
+            </button>
+            <button class="btn btn-primary btn-danger btnDelete" style="width: auto; ">
+                DELETE
+            </button>
+        </form>
+ 
+        <hr>
+        
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="h-100 bg-light rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="mb-0">REPLY REGISTER</h6>
+                </div>
+                <div class="mb-3 replyRegister">          
+                    <input type="hidden" name="replyer" value="MK">
+                    <input type="text" name="reply" class="form-control">
+                </div>
+                <div class="button_wrap">
+                    <button class="btn btn-primary btnReply">REPLY REGISTER</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="replyWrap">
+            <h5>REPLY</h5>
+            <ul class = "replyUL"></ul>
+        </div>
+
+        <div class="modal replyModModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        REPLY MODIFY
+                    </div>
+                    <div class="modal-body replyModify">                        
+                        <input type="hidden" name="replyer" value="MK">
+                        <input type="text" name="reply" class="form-control">
+                        <div class="replyModifyVal"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btnReplyModify">REPLY MODIFY</button>
+                        <button class="btn btn-danger btnReplyDelete">REPLY DELETE</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    </div>
+  
+    <script layout:fragment="script" th:inline="javascript"> 
+
+        // 리스트 수정,삭제
+        const actionForm = document.querySelector(".actionForm")
+        const btnModify = document.querySelector(".btnModify")
+        const btnDelete = document.querySelector(".btnDelete")    
+
+        // 댓글
+        const replyUL = document.querySelector(".replyUL")
+        const {bno} = [[${dto}]]
+
+        const replyBtn = document.querySelector('.btnReply');
+        const replyModify = document.querySelector(".replyModify")
+        const replyModModal = new bootstrap.Modal(document.querySelector(".replyModModal"))
+        const replyWrap = document.querySelector(".replyWrap")
+        const btnReplyModify = document.querySelector(".btnReplyModify")
+        const replyModifyVal = replyModify.querySelector(".replyModifyVal")
+
+        // 댓글 삭제
+        const btnReplyDelete = document.querySelector(".btnReplyDelete")
+
+        // 댓글목록을 가져오는 함수.
+        const getRemoteList = async(pageNum) => {
+            const {data} = await axios.get(`http://localhost:8080/replies/${bno}/list`)
+            console.log(data)
+
+            return data
+        }
+        const getReadOne = async(rno) => {
+            const res = await axios.get(`http://localhost:8080/replies/read/${rno}`)
+            return res.data
+
+            console.log("rno"+rno)
+        }
+
+        let page = 1
+
+        const loadReply = async(page, goEnd = false) => {
+            const data = await getRemoteList(page)
+
+            console.log("loadReply.....")
+            console.log(data)
+
+            const {list, total} = data
+
+            let str = ""
+
+            for(let i = 0; i < list.length; i++) {
+
+                const {rno, reply, replyer} = list[i]
+
+                str += `<li data-rno=${rno}>No.${rno} | ${reply} | 【작성자 : ${replyer}】 </li>`
+            } //end for.
+
+            replyUL.innerHTML = str
+
+            //console.log("str-----"+str)
+        }
+
+        loadReply()    
+
+        const postRemoteAdd = async(reply)=> {
+            const {data} = await axios.post(`http://localhost:8080/replies/${bno}/new`, reply)
+            return data
+        }
+
+        replyBtn.addEventListener("click", e => {
+            const replyVal = document.querySelector("input[name=reply]").value // AAAA 담김.
+            const replyerVal = document.querySelector("input[name=replyer]").value // USER00.
+
+            const temp = {reply: replyVal, replyer: replyerVal} // temp로 묶음.
+
+            postRemoteAdd(temp).then(result => {       
+                console.log("result:....."+result);
+                loadReply()
+            })
+        }, false)
+
+        //댓글 수정.
+        const putReply = async(reply) => {
+            const res = await axios.put(`http://localhost:8080/replies/modify/${reply.rno}`, reply)
+            return res.data
+        }
+
+        //댓글수정 모달.
+        replyWrap.addEventListener("click", (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+
+            //target 찾기.
+            const target = e.target
+
+            if (!target.getAttribute("data-rno")) {
+                return
+            }
+
+            const rno = target.getAttribute("data-rno")
+            //console.log(target.getAttribute("data-reply"))
+
+            getReadOne(rno).then(data => {
+                replyModModal.show()
+                replyModify.querySelector("input[name=reply]").value = data.reply
+                replyModifyVal.innerHTML = `<input type="hidden" name="rno" value="${rno}">`
+            })
+        }, false)
+
+        // 댓글 수정.
+        btnReplyModify.addEventListener("click", (e) => {
+        
+            e.preventDefault()
+            e.stopPropagation()
+            
+            const target = e.target
+            const rno = replyModify.querySelector("input[name=rno]").value
+            const reply = replyModify.querySelector("input[name=reply]").value
+
+            //객체로 만들기.
+            const temp = {rno, reply}
+
+            putReply(temp).then(data => {
+                alert(data.result + "번 댓글이 수정 되었습니다.")
+                //getListDefault()
+                replyModModal.hide()
+                loadReply()
+            })
+        })
+
+        // 댓글 삭제.
+        const deleteReply = async(rno) => {
+            const res = await axios.delete(`http://localhost:8080/replies/delete/${rno}`)
+            return res.data
+        }
+
+        // 댓글 삭제.
+        btnReplyDelete.addEventListener("click", (e) => {
+        
+            e.preventDefault()
+            e.stopPropagation()
+            
+            const target = e.target
+            const rno = target.closest(".replyModModal").querySelector("input[name=rno]").value
+
+            deleteReply(rno).then(data => {
+                alert(`${rno}번 댓글이 삭제 되었습니다.`)
+                replyModModal.hide()
+                loadReply()
+            })
+        })
+
+        btnModify.addEventListener("click", (e) => {
+            actionForm.setAttribute("action", `/board/modify/[[${ dto.bno }]]`)
+            actionForm.setAttribute("method", `get`)
+            actionForm.submit();
+        })
+
+        btnDelete.addEventListener("click", (e) => {
+            actionForm.setAttribute("action", `/board/delete/[[${ dto.bno }]]`)
+            actionForm.setAttribute("method", `post`)
+            actionForm.submit();
+        })
+    
+    </script>
+  
+</body>
+
+</html>

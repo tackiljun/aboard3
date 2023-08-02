@@ -9,6 +9,7 @@ import org.astro.aboard3.dto.BoardDTO;
 import org.astro.aboard3.dto.PageRequestDTO;
 import org.astro.aboard3.dto.PageResponseDTO;
 import org.astro.aboard3.mappers.BoardMapper;
+import org.astro.aboard3.mappers.FileMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class BoardServiceImpl implements BoardService {
     ////////////////////////////////////////////////////////////////////////////////
     // 의존성 주입.
     private final BoardMapper boardMapper;
+    private final FileMapper fileMapper;
 
     ////////////////////////////////////////////////////////////////////////////////
     @Override
@@ -61,7 +63,7 @@ public class BoardServiceImpl implements BoardService {
 
             AtomicInteger index = new AtomicInteger();
 
-            // 등록된 파일 fileNames에서 추출.
+            // 등록된 파일의 fileNames에서 추출.
             List<Map<String, String>> list = fileNames.stream().map(str -> {
                 // uuid 가져오기.
                 String uuid = str.substring(0, 36);
@@ -69,9 +71,12 @@ public class BoardServiceImpl implements BoardService {
                 String fileName = str.substring(37);
 
                 // return map에 담기.
-                return Map.of("uuid", uuid, "fileName", 
-                fileName, "bno", "" + bno, "ord", "" + index.getAndIncrement());
-            }).collect(Collectors.toList());
+                return Map.of(
+                    "uuid", uuid, 
+                    "fileName", fileName, 
+                    "bno", "" + bno, 
+                    "ord", "" + index.getAndIncrement());
+                }).collect(Collectors.toList());
 
             // 파일 등록 실행.
             boardMapper.registerImg(list);
@@ -109,8 +114,11 @@ public class BoardServiceImpl implements BoardService {
                 String fileName = str.substring(37);
 
                 // return map에 담기.
-                return Map.of("uuid", uuid, "fileName", 
-                fileName, "bno", "" + bno, "ord", "" + index.getAndIncrement());
+                return Map.of(
+                    "uuid", uuid, 
+                    "fileName", fileName, 
+                    "bno", "" + bno, 
+                    "ord", "" + index.getAndIncrement());
             }).collect(Collectors.toList());
 
             // 파일등록 실행.

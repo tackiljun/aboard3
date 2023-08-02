@@ -47,7 +47,7 @@ public class FileController {
     /////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/upload")
     public List<FileDTO> upload(MultipartFile[] files) {
-        // 파일이 없을 경우
+        // 파일이 없을 경우.
         if(files == null || files.length == 0) {
             return null;
         }
@@ -99,9 +99,9 @@ public class FileController {
                 }
                 fileList.add(result);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } 
         return fileList;
     }

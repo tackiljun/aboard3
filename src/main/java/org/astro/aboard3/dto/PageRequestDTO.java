@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class PageRequestDTO {
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     @Builder.Default
     private int page = 1;
 
@@ -30,7 +30,7 @@ public class PageRequestDTO {
 
     private String link;
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     public void setPage(int page) {
 
         if(page <= 0) {
@@ -40,7 +40,7 @@ public class PageRequestDTO {
         }
     }
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     public void setSize(int size) {
 
         if(size > 100 || size < 0) {
@@ -50,25 +50,26 @@ public class PageRequestDTO {
         }
     }
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     public int getSkip() {
 
         return (this.page -1) * this.size;
     }
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     public int getEnd() {
         
         return this.page * this.size;
     }
 
-    ///////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
     public int getCountEnd() {
 
         int temp = (int) (Math.ceil(this.page/10.0) * (10 * size));
         return temp + 1;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////
     public String[] getType() {
 
         if(this.type == null || this.type.isEmpty()) {
@@ -77,12 +78,13 @@ public class PageRequestDTO {
         return this.type.split("");
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////
     public String getLink() {
 
         if(link == null) {
 
             // 문자열 합치기.
-            StringBuilder strBuilder =  new StringBuilder();
+            StringBuilder strBuilder = new StringBuilder();
 
             // 쿼리스트링으로.
             strBuilder.append("page= " + this.page);
@@ -90,18 +92,20 @@ public class PageRequestDTO {
         
             //검색타입
             if(type != null && type.length() > 0) {
+
                 strBuilder.append("&type=" + this.type);
             }
 
             // 검색.
             if(keyword != null && keyword.length() > 0) {
+                
                 try {
                     strBuilder.append("&keyword=" + URLEncoder.encode(keyword,"UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
-            //toString으로 합친 문자열 String으로 반환
+            // toString으로 합친 문자열 String으로 반환.
             link = strBuilder.toString();
         }
         return link;
