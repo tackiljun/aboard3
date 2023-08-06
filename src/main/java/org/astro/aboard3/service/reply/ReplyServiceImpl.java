@@ -58,4 +58,5 @@ public class ReplyServiceImpl implements ReplyService {
         
         replyMapper.replyDelete(rno);
     }
+    
 }

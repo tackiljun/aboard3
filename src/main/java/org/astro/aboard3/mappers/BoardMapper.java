@@ -28,4 +28,5 @@ public interface BoardMapper {
     int registerImg(List<Map<String, String>> imgList);
 
     int deleteImg(Integer bno);
+    
 }

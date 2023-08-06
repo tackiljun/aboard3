@@ -32,4 +32,5 @@ public class BoardDTO {
     ////////////////////////////////
     // 파일리스트.
     private List<String> fileNames;
+    
 }

@@ -18,4 +18,5 @@ public interface ReplyService {
     void replyModify(ReplyDTO replyDTO);
 
     void repllyDelete(Long rno);
+    
 }

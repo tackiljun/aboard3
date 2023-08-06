@@ -28,4 +28,5 @@ public class FileDTO {
             return "default.jpg";
         }
     }
+    
 }

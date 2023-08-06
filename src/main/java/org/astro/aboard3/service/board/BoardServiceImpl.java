@@ -133,4 +133,5 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.delete(bno);
         boardMapper.deleteImg(bno);
     }
+    
 }

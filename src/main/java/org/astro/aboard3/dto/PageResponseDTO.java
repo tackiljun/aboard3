@@ -20,4 +20,5 @@ public class PageResponseDTO<E> {
         this.list = list;
         this.total = total;
     }
+    
 }
