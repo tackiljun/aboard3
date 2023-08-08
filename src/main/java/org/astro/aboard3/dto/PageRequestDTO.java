@@ -100,7 +100,7 @@ public class PageRequestDTO {
             if(keyword != null && keyword.length() > 0) {
                 
                 try {
-                    strBuilder.append("&keyword=" + URLEncoder.encode(keyword,"UTF-8"));
+                    strBuilder.append("&keyword=" + URLEncoder.encode(keyword, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

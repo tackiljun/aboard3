@@ -90,7 +90,7 @@ public class ReplyController {
 
         log.info("DELETE ||||| ----------replyDelete----------");
 
-        replyService.repllyDelete(rno);
+        replyService.replyDelete(rno);
 
         return Map.of("result", rno);
     }

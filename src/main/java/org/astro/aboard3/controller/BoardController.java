@@ -44,9 +44,13 @@ public class BoardController {
     @GetMapping("read/{bno}")
     public String getRead(@PathVariable("bno") Integer bno, Model model) {
 
-        model.addAttribute("bto", boardService.getRead(bno));
+        model.addAttribute("dto", boardService.getRead(bno));
 
         log.info("GET ||||| ----------getRead----------");
+
+        // BoardDTO boardDTO = boardService.getRead(bno);
+
+        // log.info(boardDTO);
 
         return "/board/read";
     }

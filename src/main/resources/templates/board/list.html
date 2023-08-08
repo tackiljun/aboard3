@@ -52,8 +52,8 @@
                             <td>[[${dto.bno}]]</td>
                             <td th:data-bno="${dto.bno}">
                                 <a th:href="@{|http://localhost/${dto.fileName}|}" target="_blank" style="height: 80px;">
-                                    <img th:if="${dto.fileName}" th:src="|http://localhost/${dto.fileName}|" height="80"/>
-                                    <img th:unless="${dto.fileName}" th:src="|http://localhost/noimage.png|" width="80"/>
+                                    <img th:if="${dto.fileName}" th:src="|http://localhost/${dto.fileName}|" width="80" height="70"/>
+                                    <img th:unless="${dto.fileName}" th:src="|http://localhost/noimage.png|" width="80" height="70" />
                                 </a>
                                 [[${dto.title}]]
                             </td>
@@ -66,7 +66,7 @@
                 <button 
                 onclick="location.href='/board/regist'" 
                 type="submit" 
-                class="btn btn-primary btn-block" 
+                class="btn btn-primary btn-block"
                 style="width: auto;">
                     REGIST
                 </button>
@@ -94,7 +94,7 @@
 
         boardUL.addEventListener("click", (e) => {
             e.preventDefault()
-            e.stopPropagation()      
+            e.stopPropagation()
 
             const target = e.target
             const pageNum = target.getAttribute("href")
@@ -114,8 +114,6 @@
 
         const { total } = [[${pageResponseDTO}]]
         console.log("total: " + total)
-
-
 
         const pageLIStr = makePages(page, size, total)
         console.log("boardUL: " + boardUL)

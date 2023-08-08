@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{layout/lteLayout.html}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/lteLayout.html}">
 
 <!-- <style>
     div .list {
@@ -21,9 +20,9 @@ layout:decorate="~{layout/lteLayout.html}">
 </style> -->
 
 <body>
-   
-    <div class="container-fluid pt-4 px-4" layout:fragment="content">
 
+    <div class="container-fluid pt-4 px-4" layout:fragment="content">
+        [[${dto}]]
         <h1>READ PAGE</h1>
 
         <div class="col-md-6">
@@ -31,30 +30,41 @@ layout:decorate="~{layout/lteLayout.html}">
                 <div class="card-body">
                     <label>NO.</label>
                     <div class="form-control form-control-lg">[[${dto.bno}]]</div>
+
                     <label>TITLE</label>
                     <div class="form-control form-control-lg">[[${dto.title}]]</div>
+
                     <label>WRITER</label>
                     <div class="form-control form-control-lg">[[${dto.writer}]]</div>
+
                     <label>CONTENT</label>
                     <div class="form-control form-control-lg">[[${dto.content}]]</div>
+
                     <label>DUEDATE</label>
-                    <div class="form-control form-control-lg">[[${dto.duedate}]]</div>
+                    <div class="form-control form-control-lg">[[${dto.dueDate}]]</div>
+
+                    
                 </div>
 
-                <hr>        
+                <hr>
 
-                <div class="uploadWrap mb-3">
-                    <ul class="uploadUL">
-                        <h5 class="mb-0">FILE</h5>
-                        <li th:each="list: ${dto.fileNames}">
-                            <a th:href="@{|http://localhost/${list}|}" target="_blank" style="height: 100px;">
-                                <img th:src="|http://localhost/${list}|" height="100"/>
-                                [[${list}]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+
             </div>
+
+            
+        </div>
+        
+
+        <div class="uploadWrap mb-3">
+            <ul class="uploadUL">
+                <h5 class="mb-0">FILE</h5>
+                <li th:each="list: ${dto.fileNames}">
+                    <a th:href="@{|http://localhost/${list}|}" target="_blank" style="height: 100px;">
+                        <img th:src="|http://localhost/${list}|" height="100" />
+                        [[${list}]]
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <form class="actionForm">
@@ -68,16 +78,18 @@ layout:decorate="~{layout/lteLayout.html}">
                 DELETE
             </button>
         </form>
- 
+
+
+
         <hr>
-        
+
         <div class="col-sm-12 col-md-12 col-xl-12">
             <div class="h-100 bg-light rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h6 class="mb-0">REPLY REGISTER</h6>
                 </div>
-                <div class="mb-3 replyRegister">          
-                    <input type="hidden" name="replyer" value="MK">
+                <div class="mb-3 replyRegister">
+                    <input type="hidden" name="replyer" value="TTT">
                     <input type="text" name="reply" class="form-control">
                 </div>
                 <div class="button_wrap">
@@ -88,7 +100,7 @@ layout:decorate="~{layout/lteLayout.html}">
 
         <div class="replyWrap">
             <h5>REPLY</h5>
-            <ul class = "replyUL"></ul>
+            <ul class="replyUL"></ul>
         </div>
 
         <div class="modal replyModModal" tabindex="-1" role="dialog">
@@ -97,8 +109,8 @@ layout:decorate="~{layout/lteLayout.html}">
                     <div class="modal-header">
                         REPLY MODIFY
                     </div>
-                    <div class="modal-body replyModify">                        
-                        <input type="hidden" name="replyer" value="MK">
+                    <div class="modal-body replyModify">
+                        <input type="hidden" name="replyer" value="TTT">
                         <input type="text" name="reply" class="form-control">
                         <div class="replyModifyVal"></div>
                     </div>
@@ -114,17 +126,17 @@ layout:decorate="~{layout/lteLayout.html}">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     </div>
-  
-    <script layout:fragment="script" th:inline="javascript"> 
+
+    <script layout:fragment="script" th:inline="javascript">
 
         // 리스트 수정,삭제.
         const actionForm = document.querySelector(".actionForm")
         const btnModify = document.querySelector(".btnModify")
-        const btnDelete = document.querySelector(".btnDelete")    
+        const btnDelete = document.querySelector(".btnDelete")
 
         // 댓글.
         const replyUL = document.querySelector(".replyUL")
-        const {bno} = [[${dto}]]
+        const { bno } = [[${ dto }]]
 
         const replyBtn = document.querySelector('.btnReply');
         const replyModify = document.querySelector(".replyModify")
@@ -137,13 +149,13 @@ layout:decorate="~{layout/lteLayout.html}">
         const btnReplyDelete = document.querySelector(".btnReplyDelete")
 
         // 댓글목록을 가져오는 함수.
-        const getRemoteList = async(pageNum) => {
-            const {data} = await axios.get(`http://localhost:8080/replies/${bno}/list`)
+        const getRemoteList = async (pageNum) => {
+            const { data } = await axios.get(`http://localhost:8080/replies/${bno}/list`)
             console.log(data)
 
             return data
         }
-        const getReadOne = async(rno) => {
+        const getReadOne = async (rno) => {
             const res = await axios.get(`http://localhost:8080/replies/read/${rno}`)
             return res.data
 
@@ -152,32 +164,32 @@ layout:decorate="~{layout/lteLayout.html}">
 
         let page = 1
 
-        const loadReply = async(page, goEnd = false) => {
+        const loadReply = async (page, goEnd = false) => {
             const data = await getRemoteList(page)
 
             console.log("loadReply.....")
             console.log(data)
 
-            const {list, total} = data
+            const { list, total } = data
 
             let str = ""
 
-            for(let i = 0; i < list.length; i++) {
+            for (let i = 0; i < list.length; i++) {
 
-                const {rno, reply, replyer} = list[i]
+                const { rno, reply, replyer } = list[i]
 
-                str += `<li data-rno=${rno}>No.${rno} | ${reply} | 【작성자 : ${replyer}】 </li>`
+                str += `<li data-rno=${rno} style="font-size:20px;"> No.${rno} | ${reply} | 【작성자 : ${replyer}】 </li>`
             } // end for.
 
             replyUL.innerHTML = str
 
-            //console.log("str-----"+str)
+            console.log("str: " + str);
         }
 
-        loadReply()    
+        loadReply()
 
-        const postRemoteAdd = async(reply)=> {
-            const {data} = await axios.post(`http://localhost:8080/replies/${bno}/new`, reply)
+        const postRemoteAdd = async (reply) => {
+            const { data } = await axios.post(`http://localhost:8080/replies/${bno}/new`, reply)
             return data
         }
 
@@ -188,16 +200,16 @@ layout:decorate="~{layout/lteLayout.html}">
             const replyerVal = document.querySelector("input[name=replyer]").value
 
             // temp로 묶음.
-            const temp = {reply: replyVal, replyer: replyerVal}
+            const temp = { reply: replyVal, replyer: replyerVal }
 
-            postRemoteAdd(temp).then(result => {       
+            postRemoteAdd(temp).then(result => {
                 console.log("result: " + result);
                 loadReply()
             })
         }, false)
 
         // 댓글수정.
-        const putReply = async(reply) => {
+        const putReply = async (reply) => {
             const res = await axios.put(`http://localhost:8080/replies/modify/${reply.rno}`, reply)
             return res.data
         }
@@ -226,16 +238,16 @@ layout:decorate="~{layout/lteLayout.html}">
 
         // 댓글수정.
         btnReplyModify.addEventListener("click", (e) => {
-        
+
             e.preventDefault()
             e.stopPropagation()
-            
+
             const target = e.target
             const rno = replyModify.querySelector("input[name=rno]").value
             const reply = replyModify.querySelector("input[name=reply]").value
 
             // 객체로 만들기.
-            const temp = {rno, reply}
+            const temp = { rno, reply }
 
             putReply(temp).then(data => {
                 alert(data.result + "번 댓글이 수정 되었습니다.")
@@ -246,17 +258,17 @@ layout:decorate="~{layout/lteLayout.html}">
         })
 
         // 댓글삭제.
-        const deleteReply = async(rno) => {
+        const deleteReply = async (rno) => {
             const res = await axios.delete(`http://localhost:8080/replies/delete/${rno}`)
             return res.data
         }
 
         // 댓글삭제.
         btnReplyDelete.addEventListener("click", (e) => {
-        
+
             e.preventDefault()
             e.stopPropagation()
-            
+
             const target = e.target
             const rno = target.closest(".replyModModal").querySelector("input[name=rno]").value
 
@@ -278,9 +290,9 @@ layout:decorate="~{layout/lteLayout.html}">
             actionForm.setAttribute("method", `post`)
             actionForm.submit();
         })
-    
+
     </script>
-  
+
 </body>
 
 </html>
