@@ -6,13 +6,11 @@
 <mapper namespace="org.astro.aboard3.mappers.ReplyMapper">
 
     <select id="selectList" resultType="org.astro.aboard3.dto.ReplyDTO">
-
         select rno, bno, reply, replyer, replydate from tbl_reply0 where bno=#{bno}
     </select>
 
     <insert id="replyRegist">
         insert into tbl_reply0 (bno, reply, replyer) values (#{bno}, #{reply}, #{replyer})
-        
         <selectKey resultType="long" keyProperty="rno" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>

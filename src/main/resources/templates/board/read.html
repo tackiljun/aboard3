@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layout/lteLayout.html}">
 
 <!-- <style>
@@ -22,7 +23,7 @@
 <body>
 
     <div class="container-fluid pt-4 px-4" layout:fragment="content">
-        [[${dto}]]
+        <!-- [[${dto}]] -->
         <h1>READ PAGE</h1>
 
         <div class="col-md-6">
@@ -42,19 +43,12 @@
 
                     <label>DUEDATE</label>
                     <div class="form-control form-control-lg">[[${dto.dueDate}]]</div>
-
-                    
                 </div>
-
-                <hr>
-
-
             </div>
-
-            
         </div>
-        
 
+        <hr>
+        
         <div class="uploadWrap mb-3">
             <ul class="uploadUL">
                 <h5 class="mb-0">FILE</h5>
@@ -68,18 +62,22 @@
         </div>
 
         <form class="actionForm">
-            <button onclick="location.href='/board/list'" type="button" class="btn btn-primary" style="width: auto;">
+            <button 
+            onclick="location.href='/board/list'" type="button" 
+            class="btn btn-primary" style="width: auto;">
                 LIST
             </button>
-            <button class="btn btn-primary btn-secondary btnModify" style="width: auto;">
+            <button 
+            class="btn btn-primary btn-secondary btnModify" 
+            style="width: auto;">
                 MODIFY
             </button>
-            <button class="btn btn-primary btn-danger btnDelete" style="width: auto;">
+            <button 
+            class="btn btn-primary btn-danger btnDelete" 
+            style="width: auto;">
                 DELETE
             </button>
         </form>
-
-
 
         <hr>
 
@@ -93,7 +91,9 @@
                     <input type="text" name="reply" class="form-control">
                 </div>
                 <div class="button_wrap">
-                    <button class="btn btn-primary btnReply">REPLY REGISTER</button>
+                    <button class="btn btn-primary btnReply">
+                        REPLY REGISTER
+                    </button>
                 </div>
             </div>
         </div>
@@ -115,16 +115,21 @@
                         <div class="replyModifyVal"></div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btnReplyModify">REPLY MODIFY</button>
-                        <button class="btn btn-danger btnReplyDelete">REPLY DELETE</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
+                        <button class="btn btn-primary btnReplyModify">
+                            REPLY MODIFY
+                        </button>
+                        <button class="btn btn-danger btnReplyDelete">
+                            REPLY DELETE
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            CLOSE
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     </div>
 
     <script layout:fragment="script" th:inline="javascript">

@@ -6,7 +6,6 @@
 <mapper namespace="org.astro.aboard3.mappers.BoardMapper">
 
     <select id="getList" resultType="org.astro.aboard3.dto.BoardDTO">
-
         select b.bno, b.title, b.content, b.writer, concat(bi.uuid, '_', bi.fileName) as fileName
         from tbl_board b left outer join tbl_board_image bi on bi.bno = b.bno
         where bi.ord = 0 or bi.ord is null
@@ -54,7 +53,6 @@
 
     <insert id="regist" parameterType="org.astro.aboard3.dto.BoardDTO">
         insert into tbl_board (title, content, writer) values (#{title}, #{content}, #{writer})
-
         <selectKey resultType="int" keyProperty="bno" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
